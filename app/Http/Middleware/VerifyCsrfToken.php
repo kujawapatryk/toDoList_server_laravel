@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        'api/*',  // Wyłącz weryfikację CSRF dla wszystkich tras zaczynających się od "api/"
     ];
 }

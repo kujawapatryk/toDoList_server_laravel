@@ -15,9 +15,9 @@ return [
     |
     */
 
-    'paths' => ['*'],
+    'paths' => ['api/*'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PATCH', 'DELETE'],
 
     'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
 
