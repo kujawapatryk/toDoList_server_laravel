@@ -5,29 +5,32 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\AddTaskRequest;
 use App\Models\Task;
 use App\Http\Controllers\Controller;
+use App\Repositories\TaskRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class TaskController extends Controller
 {
+    private TaskRepositoryInterface $repository;
+    public function __construct(TaskRepositoryInterface $repository){
+        $this->repository = $repository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(): Collection
     {
-        return Task::all();
+        return $this->repository->getAllTasks();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AddTaskRequest $request): void
+    public function store(AddTaskRequest $request): Task
     {
-        $task = new Task();
-        $task->done = $request['done'] ? $request['done'] : false;
-        $task->content = $request['content'];
-        $task->save();
+        return $this->repository->createTask($request);
     }
 
     /**
@@ -41,17 +44,24 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request, Task $task): JsonResponse
     {
-        $task->update(['done' => $request['done']]);
 
+        $result = $this->repository->updateTask($task, $request['done']);
+
+        return $result
+            ? response()->json(['message' => 'taskConfirmation', 'status' => 'success'], ResponseAlias::HTTP_OK)
+            : response()->json(['message' => 'tryLater', 'status' => 'fail'], ResponseAlias::HTTP_BAD_REQUEST);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task): void
+    public function destroy(Task $task): JsonResponse
     {
-        $task->delete();
+        $result = $this->repository->deleteTask($task);
+        return $result
+            ? response()->json(['message' => 'taskDeleted', 'status' => 'success'], ResponseAlias::HTTP_OK)
+            : response()->json(['message' => 'tryLater', 'status' => 'fail'], ResponseAlias::HTTP_BAD_REQUEST);
     }
 }
