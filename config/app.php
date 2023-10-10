@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'TodoList'),
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'pl',
 
     /*
     |--------------------------------------------------------------------------
@@ -170,6 +170,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        \App\Providers\TaskServiceProvider::class,
     ])->toArray(),
 
     /*
