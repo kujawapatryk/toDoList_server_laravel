@@ -23,7 +23,7 @@ class TaskRepository implements TaskRepositoryInterface {
 
     public function updateTask(Task $task, bool $done): bool
     {
-        return $task->update([$done]);
+        return $task->update(['done' => $done]);
     }
 
     public function deleteTask(Task $task): bool
